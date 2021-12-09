@@ -1,6 +1,3 @@
-import kotlin.math.abs
-import kotlin.math.exp
-
 fun main() {
     fun part1(input: List<String>): Int {
         val width = input[0].length
