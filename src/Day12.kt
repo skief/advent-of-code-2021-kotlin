@@ -1,19 +1,26 @@
-import kotlin.system.measureNanoTime
-
 fun main() {
     fun isBig(node: String): Boolean{
         return node.count { it.isUpperCase() } == node.length
     }
 
-    fun dfs(connections: Map<String, Set<String>>, visited: Set<String>, currentRoute: List<String>): Set<List<String>>{
+    fun dfs(connections: Map<String, Set<String>>, visited: Set<String>, visitedTwice: Boolean, currentRoute: List<String>): Set<List<String>>{
         if (currentRoute.lastOrNull() == "end"){
             return setOf(currentRoute)
         }
         val allRoutes = mutableSetOf<List<String>>()
 
         for (neighbor in connections[currentRoute.last()]!!){
-            if (isBig(neighbor) || !visited.contains(neighbor)){
-                allRoutes.addAll(dfs(connections, visited + setOf(neighbor), currentRoute + listOf(neighbor)))
+            if (isBig(neighbor) || !visited.contains(neighbor) || (!visitedTwice && neighbor != "start")){
+                var newVisited = visited
+                var newVisitedTwice = visitedTwice
+
+                if (visited.contains(neighbor) && !isBig(neighbor)){
+                    newVisitedTwice = true
+                } else {
+                    newVisited = newVisited + setOf(neighbor)
+                }
+
+                allRoutes.addAll(dfs(connections, newVisited, newVisitedTwice, currentRoute + listOf(neighbor)))
             }
         }
 
@@ -43,33 +50,9 @@ fun main() {
             nodes.add(c[1])
         }
 
-        val routes = dfs(connectionMap, setOf("start"), listOf("start"))
+        val routes = dfs(connectionMap, setOf("start"), true, listOf("start"))
 
         return routes.size
-    }
-
-    fun dfs2(connections: Map<String, Set<String>>, visited: Set<String>, visitedTwice: Boolean, currentRoute: List<String>): Set<List<String>>{
-        if (currentRoute.lastOrNull() == "end"){
-            return setOf(currentRoute)
-        }
-        val allRoutes = mutableSetOf<List<String>>()
-
-        for (neighbor in connections[currentRoute.last()]!!){
-            if (isBig(neighbor) || !visited.contains(neighbor) || (!visitedTwice && neighbor != "start")){
-                var newVisited = visited
-                var newVisitedTwice = visitedTwice
-
-                if (visited.contains(neighbor) && !isBig(neighbor)){
-                    newVisitedTwice = true
-                } else {
-                    newVisited = newVisited + setOf(neighbor)
-                }
-
-                allRoutes.addAll(dfs2(connections, newVisited, newVisitedTwice, currentRoute + listOf(neighbor)))
-            }
-        }
-
-        return allRoutes
     }
 
     fun part2(input: List<String>): Int {
@@ -95,7 +78,7 @@ fun main() {
             nodes.add(c[1])
         }
 
-        val routes = dfs2(connectionMap, setOf("start"), false, listOf("start"))
+        val routes = dfs(connectionMap, setOf("start"), false, listOf("start"))
 
         return routes.size
     }
