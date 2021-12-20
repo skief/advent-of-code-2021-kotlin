@@ -24,6 +24,7 @@
 | [Day 17](https://adventofcode.com/2021/day/17) | ⭐ | ⭐ |
 | [Day 18](https://adventofcode.com/2021/day/18) | ⭐ | ⭐ |
 | [Day 19](https://adventofcode.com/2021/day/19) | ⭐ | ⭐ |
+| [Day 20](https://adventofcode.com/2021/day/20) | ⭐ | ⭐ |
 <!--- advent_readme_stars table --->
 
 Welcome to the Advent of Code[^aoc] Kotlin project created by [skief][github] using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
